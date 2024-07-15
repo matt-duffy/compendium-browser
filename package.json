@@ -1,0 +1,19 @@
+{
+  "name": "compendium-browser",
+  "title": "Compendium Browser",
+  "version": "1.0.0",
+  "description": "Easily browse and filter spells, feats, items, and npcs loaded from compendia!",
+  "scripts": {
+    "build": "run-s clean build:copy",
+    "build:copy": "shx cp -r ./src/* ./dist",
+    "clean": "rimraf --glob ./dist/*"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "shx": "^0.3.4"
+  },
+  "lint-staged": {
+    "*.(js|mjs)": "eslint --fix",
+    "*.(json|css|yml)": "prettier --write"
+  }
+}
