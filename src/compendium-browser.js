@@ -1414,8 +1414,14 @@ class CompendiumBrowser extends Application {
             filter.possibleValueIds = possibleValues;
 
             filter.possibleValues = Object.keys(possibleValues).reduce(function (acc, current) {
-                acc[current] = game.i18n.localize(possibleValues[current]) ?? possibleValues[current];
-                return acc;
+                if(typeof possibleValues[current] === 'object'){
+                    acc[current] = game.i18n.localize(possibleValues[current].fullKey) ?? possibleValues[current].fullKey;
+                    return acc;
+                }
+                else{
+                    acc[current] = game.i18n.localize(possibleValues[current]) ?? possibleValues[current];
+                    return acc;
+                }
             }.bind(this),
             {})
         }
