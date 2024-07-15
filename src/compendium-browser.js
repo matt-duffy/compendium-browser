@@ -74,7 +74,7 @@ class CompendiumBrowser extends Application {
 
     static get defaultOptions() {
         const options = super.defaultOptions;
-        mergeObject(options, {
+        foundry.utils.mergeObject(options, {
             title: "CMPBrowser.compendiumBrowser",
             tabs: [{navSelector: ".tabs", contentSelector: ".content", initial: "spell"}],
             classes: options.classes.concat('compendium-browser'),
