@@ -357,7 +357,7 @@ class CompendiumBrowser extends Application {
         });
 
         // select filters
-        html.find('.filter[data-type=select] select, .filter[data-type=bool] select').on('change', ev => {
+        html.find('.filter[data-type=select] select, .filter[data-type=bool] select, .filter[data-type=checkArray] select').on('change', ev => {
             const path = $(ev.target).parents('.filter').data('path');
             const key = stripDotCharacters(path);
             const filterType = $(ev.target).parents('.filter').data('type');
@@ -1225,6 +1225,22 @@ class CompendiumBrowser extends Application {
 
                 continue;
             }
+            if(filter.type === 'checkArray'){
+                if (prop === undefined) return false;
+                const filterSplit = filter.value.split(':');
+
+                if(filterSplit.length < 2) return false;
+
+                const filterValue = filterSplit[0];
+                const filterCheck = filterSplit[1];
+
+                if(filterCheck === 'Yes'){
+                    return !prop.has(filterValue) ? false : true;
+                }
+                else{
+                    return prop.has(filterValue) ? false : true;
+                }
+            }
             if (filter.valIsArray === false) {
                 if (filter.type === 'text') {
                     if (prop === undefined) return false;
@@ -1410,6 +1426,11 @@ class CompendiumBrowser extends Application {
             filter.type = type;
         }
 
+        if(type == "checkArray"){
+            filter['isselect'] = true;
+            filter.type = type;
+        }
+
         if (possibleValues !== null) {
             filter.possibleValueIds = possibleValues;
 
@@ -1444,7 +1465,7 @@ class CompendiumBrowser extends Application {
         //Foundry v10+ Item#data is now Item#system
         if (CompendiumBrowser.isFoundryV10Plus) {
 
-            this.addSpellFilter("CMPBrowser.general", "DND5E.Source", 'system.source', 'text');
+            this.addSpellFilter("CMPBrowser.general", "DND5E.Source", 'system.source.book', 'text');
             this.addSpellFilter("CMPBrowser.general", "DND5E.Level", 'system.level', 'multiSelect', {0:"DND5E.SpellCantrip", 1:"1", 2:"2", 3:"3", 4:"4", 5:"5", 6:"6", 7:"7", 8:"8", 9:"9"});
             this.addSpellFilter("CMPBrowser.general", "DND5E.SpellSchool", 'system.school', 'select', CONFIG.DND5E.spellSchools);
             this.addSpellFilter("CMPBrowser.general", "CMPBrowser.castingTime", 'system.activation.type', 'select',
@@ -1473,14 +1494,14 @@ class CompendiumBrowser extends Application {
                     wizard: "CMPBrowser.wizard",
                 }, true
             );
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.Ritual", 'system.components.ritual', 'bool');
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.Concentration", 'system.components.concentration', 'bool');
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentVerbal", 'system.components.vocal', 'bool');
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentSomatic", 'system.components.somatic', 'bool');
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentMaterial", 'system.components.material', 'bool');
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.Ritual", 'system.properties', 'checkArray', {"ritual:Yes":"Yes", "ritual:No":"No"}, true);
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.Concentration", 'system.properties', 'checkArray', {"concentration:Yes":"Yes", "concentration:No":"No"}, true);
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentVerbal", 'system.properties', 'checkArray', {"vocal:Yes":"Yes", "vocal:No":"No"}, true);
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentSomatic", 'system.properties', 'checkArray', {"somatic:Yes":"Yes", "somatic:No":"No"}, true);
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentMaterial", 'system.properties', 'checkArray', {"material:Yes":"Yes", "material:No":"No"}, true);
         }
         else {
-            this.addSpellFilter("CMPBrowser.general", "DND5E.Source", 'data.source', 'text');
+            this.addSpellFilter("CMPBrowser.general", "DND5E.Source", 'data.source.book', 'text');
             this.addSpellFilter("CMPBrowser.general", "DND5E.Level", 'data.level', 'multiSelect', {0:"DND5E.SpellCantrip", 1:"1", 2:"2", 3:"3", 4:"4", 5:"5", 6:"6", 7:"7", 8:"8", 9:"9"});
             this.addSpellFilter("CMPBrowser.general", "DND5E.SpellSchool", 'data.school', 'select', CONFIG.DND5E.spellSchools);
             this.addSpellFilter("CMPBrowser.general", "CMPBrowser.castingTime", 'data.activation.type', 'select',
@@ -1508,11 +1529,11 @@ class CompendiumBrowser extends Application {
                     wizard: "CMPBrowser.wizard",
                 }, true
             );
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.Ritual", 'data.components.ritual', 'bool');
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.Concentration", 'data.components.concentration', 'bool');
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentVerbal", 'data.components.vocal', 'bool');
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentSomatic", 'data.components.somatic', 'bool');
-            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentMaterial", 'data.components.material', 'bool');
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.Ritual", 'data.properties.ritual', 'bool');
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.Concentration", 'data.properties.concentration', 'bool');
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentVerbal", 'data.properties.vocal', 'bool');
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentSomatic", 'data.properties.somatic', 'bool');
+            this.addSpellFilter("DND5E.SpellComponents", "DND5E.ComponentMaterial", 'data.properties.material', 'bool');
         }
     }
 
@@ -1522,11 +1543,11 @@ class CompendiumBrowser extends Application {
         // Feature Filters
         //Foundry v10+ Item#data is now Item#system
         if (CompendiumBrowser.isFoundryV10Plus) {
-            this.addItemFilter("CMPBrowser.general", "DND5E.Source", 'system.source', 'text');
+            this.addItemFilter("CMPBrowser.general", "DND5E.Source", 'system.source.book', 'text');
         }
         else
         {
-            this.addItemFilter("CMPBrowser.general", "DND5E.Source", 'data.source', 'text');
+            this.addItemFilter("CMPBrowser.general", "DND5E.Source", 'data.source.book', 'text');
         }
 
         this.addItemFilter("CMPBrowser.general", "Item Type", 'type', 'select', {
@@ -1592,11 +1613,11 @@ class CompendiumBrowser extends Application {
         // Feature Filters
         //Foundry v10+ Item#data is now Item#system
         if (CompendiumBrowser.isFoundryV10Plus) {
-            this.addFeatFilter("CMPBrowser.general", "DND5E.Source", 'system.source', 'text');
+            this.addFeatFilter("CMPBrowser.general", "DND5E.Source", 'system.source.book', 'text');
         }
         else
         {
-            this.addFeatFilter("CMPBrowser.general", "DND5E.Source", 'data.source', 'text');
+            this.addFeatFilter("CMPBrowser.general", "DND5E.Source", 'data.source.book', 'text');
         }
         this.addFeatFilter("CMPBrowser.general", "ITEM.TypeClass", 'classRequirement', 'select',
             {
