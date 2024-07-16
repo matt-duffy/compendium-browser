@@ -70,6 +70,10 @@ const STOP_SEARCH = 'StopSearchException';
 // JV-080 - Adding a 'not-migrated' exception for v10 if the compendiums are not migrated to the new format (breaks e.g. npc compendium browser)
 const NOT_MIGRATED = 'NotMigratedException';
 
+Handlebars.registerHelper('isInSet', function (inSet, value) {
+    return inSet.has(value);
+});
+
 class CompendiumBrowser extends Application {
 
     static get defaultOptions() {
@@ -532,7 +536,8 @@ class CompendiumBrowser extends Application {
                                         img: decoratedItem.img,
                                         data : {
                                             level : decoratedItem.level,
-                                            components : decoratedItem.components
+                                            components : decoratedItem.components,
+                                            properties: decoratedItem.system.properties
                                         },
                                         id: item5e.id
                                     };
