@@ -1151,7 +1151,11 @@ class CompendiumBrowser extends Application {
             }
 
             if (CONFIG.DND5E.actorSizes[npcData.traits.size] !== undefined) {
-                decoratedNpc.displaySize = CONFIG.DND5E.actorSizes[npcData.traits.size];
+                if (CompendiumBrowser.isFoundryV10Plus) {
+                    decoratedNpc.displaySize = CONFIG.DND5E.actorSizes[npc.system.traits.size].label;
+                } else {
+                    decoratedNpc.displaySize = CONFIG.DND5E.actorSizes[npc.data.traits.size].label;              
+                }
             }
             let npcSize;
             if (CompendiumBrowser.isFoundryV10Plus) {
@@ -1247,8 +1251,15 @@ class CompendiumBrowser extends Application {
             if (filter.valIsArray === false) {
                 if (filter.type === 'text') {
                     if (prop === undefined) return false;
-                    if (prop.toLowerCase().indexOf(filter.value.toLowerCase()) === -1) {
-                        return false;
+                    if(filter.path === "system.details.source"){
+                        if (prop.book.toLowerCase().indexOf(filter.value.toLowerCase()) === -1) {
+                            return false;
+                        }
+                    }
+                    else{
+                        if (prop.toLowerCase().indexOf(filter.value.toLowerCase()) === -1) {
+                            return false;
+                        }
                     }
                 } else {
                     if (prop === undefined) return false;
@@ -1435,11 +1446,12 @@ class CompendiumBrowser extends Application {
         }
 
         if (possibleValues !== null) {
+            
             filter.possibleValueIds = possibleValues;
 
             filter.possibleValues = Object.keys(possibleValues).reduce(function (acc, current) {
                 if(typeof possibleValues[current] === 'object'){
-                    acc[current] = game.i18n.localize(possibleValues[current].fullKey) ?? possibleValues[current].fullKey;
+                    acc[current] = game.i18n.localize(possibleValues[current].fullKey) ?? possibleValues[current].fullKey ?? game.i18n.localize(possibleValues[current].label) ?? possibleValues[current].label;
                     return acc;
                 }
                 else{
