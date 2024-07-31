@@ -298,10 +298,6 @@ class CompendiumBrowser extends Application {
                 this.render();
             });
 
-            //copy Javascript seach to clipboard
-            html.find(`#copy-search-${tab}`).click(async ev => {
-                this.copySearchToClipboard(tab);
-            });
         }
 
         // settings
@@ -1240,11 +1236,13 @@ class CompendiumBrowser extends Application {
                 const filterCheck = filterSplit[1];
 
                 if(filterCheck === 'Yes'){
-                    return !prop.has(filterValue) ? false : true;
+                    if(!prop.has(filterValue)) return false;
                 }
                 else{
-                    return prop.has(filterValue) ? false : true;
+                    if(prop.has(filterValue)) return false;
                 }
+
+                continue;
             }
             if (filter.valIsArray === false) {
                 if (filter.type === 'text') {
@@ -1929,19 +1927,6 @@ class CompendiumBrowser extends Application {
             path: filter.path,
             type: filter.type,
             valIsArray: filter.valIsArray,
-        }
-    }
-
-    async copySearchToClipboard(tab){
-        const text = this.getSearchText(tab)
-
-        try {
-            await navigator.clipboard.writeText(text);
-            ui.notifications.info("Javascript Copied to clipboard")
-        } catch (err) {
-            ui.notifications.warn("failed to copy javascript to clipboard, check logs for string")
-            console.error('Failed to copy: ', err);
-            console.log(text);
         }
     }
 
