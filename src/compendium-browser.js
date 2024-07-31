@@ -1219,7 +1219,7 @@ class CompendiumBrowser extends Application {
 
     passesFilter(subject, filters) {
         for (let filter of Object.values(filters)) {
-            let prop = getProperty(subject, filter.path);
+            let prop = foundry.utils.getProperty(subject, filter.path);
             if (filter.type === 'numberCompare') {
 
                 switch (filter.operator) {
