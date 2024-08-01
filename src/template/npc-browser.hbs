@@ -14,12 +14,12 @@
             </dl>
             <button id="reset-npc-filter">{{localize "CMPBrowser.Filters.ResetFilters"}}</button>
         </div>                
-        {{> "modules/compendium-browser/template/filter-container.html" filters=npcFilters}}
+        {{> "modules/compendium-browser/template/filter-container.hbs" filters=npcFilters}}
     </div>
     <div class="list-area flexcol">
         <span id="CBNpcsMessage" style="flex:0"></span>
         <ul id="CBNPCs">
-            {{> "modules/compendium-browser/template/npc-browser-list.html" npcs=npcs}}
+            {{> "modules/compendium-browser/template/npc-browser-list.hbs" npcs=npcs}}
         </ul>
     </div>
 </div>

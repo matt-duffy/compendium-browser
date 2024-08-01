@@ -82,7 +82,7 @@ class CompendiumBrowser extends Application {
             title: "CMPBrowser.compendiumBrowser",
             tabs: [{navSelector: ".tabs", contentSelector: ".content", initial: "spell"}],
             classes: options.classes.concat('compendium-browser'),
-            template: "modules/compendium-browser/template/template.html",
+            template: "modules/compendium-browser/template/template.hbs",
             width: 800,
             height: 700,
             resizable: true,
@@ -98,17 +98,17 @@ class CompendiumBrowser extends Application {
         } 
 
         await loadTemplates([
-            "modules/compendium-browser/template/spell-browser.html",
-            "modules/compendium-browser/template/spell-browser-list.html",       
-            "modules/compendium-browser/template/npc-browser.html",
-            "modules/compendium-browser/template/npc-browser-list.html",
-            "modules/compendium-browser/template/feat-browser.html",
-            "modules/compendium-browser/template/feat-browser-list.html",
-            "modules/compendium-browser/template/item-browser.html",
-            "modules/compendium-browser/template/item-browser-list.html",
-            "modules/compendium-browser/template/filter-container.html",
-            "modules/compendium-browser/template/settings.html",
-            "modules/compendium-browser/template/loading.html"
+            "modules/compendium-browser/template/spell-browser.hbs",
+            "modules/compendium-browser/template/spell-browser-list.hbs",       
+            "modules/compendium-browser/template/npc-browser.hbs",
+            "modules/compendium-browser/template/npc-browser-list.hbs",
+            "modules/compendium-browser/template/feat-browser.hbs",
+            "modules/compendium-browser/template/feat-browser-list.hbs",
+            "modules/compendium-browser/template/item-browser.hbs",
+            "modules/compendium-browser/template/item-browser-list.hbs",
+            "modules/compendium-browser/template/filter-container.hbs",
+            "modules/compendium-browser/template/settings.hbs",
+            "modules/compendium-browser/template/loading.hbs"
         ]);
 
 
@@ -864,7 +864,7 @@ class CompendiumBrowser extends Application {
     async renderLoading(messageElement, itemType, numLoaded, maxLoaded=false, doneLoading=false) {
         if (!messageElement) return;
 
-        let loadingHTML = await renderTemplate("modules/compendium-browser/template/loading.html", {numLoaded: numLoaded, itemType: itemType, maxLoaded: maxLoaded, doneLoading: doneLoading});
+        let loadingHTML = await renderTemplate("modules/compendium-browser/template/loading.hbs", {numLoaded: numLoaded, itemType: itemType, maxLoaded: maxLoaded, doneLoading: doneLoading});
         messageElement.innerHTML = loadingHTML;
     }
 
@@ -875,7 +875,7 @@ class CompendiumBrowser extends Application {
         } else {
             listItems = await this.loadAndFilterItems(browserTab, updateLoading);
         }
-        const html = await renderTemplate(`modules/compendium-browser/template/${browserTab}-browser-list.html`, {listItems : listItems})
+        const html = await renderTemplate(`modules/compendium-browser/template/${browserTab}-browser-list.hbs`, {listItems : listItems})
 
         return html;
     }
